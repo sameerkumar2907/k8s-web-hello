@@ -20,10 +20,11 @@ phases:
       - echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
       - sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
       - sudo curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-      - export HELM_INSTALL_DIR="/bin"
+      # - export HELM_INSTALL_DIR="/bin"
       - sudo chmod 700 ./get_helm.sh
       - sudo ./get_helm.sh
-      - sudo ln -s /usr/local/bin/helm /bin/helm
+      # - sudo ln -s /usr/local/bin/helm /bin/helm
+      - sudo mv /usr/local/bin/helm /usr/local/bin/helm3
   build:
     commands:
       - helm install --upgrade .
