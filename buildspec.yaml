@@ -25,6 +25,8 @@ phases:
       - sudo chmod 777 ./get_helm.sh
       # - sudo ./get_helm.sh
       - sudo ls -lrt
+      - sudo echo $PATH
+      - sudo ls -lart /usr/local/bin
       # - sudo ln -s /usr/local/bin/helm /bin/helm
       - sudo mv /usr/local/bin/helm /usr/local/bin/helm3
   build:
