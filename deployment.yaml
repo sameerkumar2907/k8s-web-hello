@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-web-hello
+spec:
+  # This field (replicas) specifies how many pods we want in this deployment.
+  # We added this field afterwards. If not added, it defaults to 1.
+  replicas: 5
+  selector:
+  # This specifies which pods will be managed by this deployment
+    matchLabels:
+      app: k8s-web-hello
+  # This nested template describes pods of this deployment
+  template:
+    metadata:
+      # Labels of the pods, which is same as labels(matchLabels) in the selector
+      labels:
+        app: k8s-web-hello
+    # In spec, we specify which containers we want in this pod
+    spec:
+      containers:
+      - name: k8s-web-hello
+        image: sameer2907/k8s-web-hello:amd
+        resources:
+          # memory and cpu limits for each pod in this deployment
+          limits:
+            memory: "128Mi"
+            # 250m means one-fourth of the cpu core
+            cpu: "250m"
+        # We specify which port we would like to open in specific container
+        ports:
+        # List of the ports which will be open on pod's IP address
+        - containerPort: 3000

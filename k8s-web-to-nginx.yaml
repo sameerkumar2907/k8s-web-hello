@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-web-to-nginx
+spec:
+  # We added this field afterwards. If not present, it defaults to CluserIP.
+  type: LoadBalancer
+  selector:
+    app: k8s-web-to-nginx
+  ports:
+  # Before, we didn't need target port, because we exposed the same port at which our node server was running(3000)
+  # Now, lets expose the server(running at 3000), to some other port(say 3333)
+  - port: 3333
+    targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-web-to-nginx
+spec:
+  # This field (replicas) specifies how many pods we want in this deployment.
+  # We added this field afterwards. If not added, it defaults to 1.
+  replicas: 3
+  selector:
+  # This specifies which pods will be managed by this deployment
+    matchLabels:
+      app: k8s-web-to-nginx
+  # This nested template describes pods of this deployment
+  template:
+    metadata:
+      # Labels of the pods, which is same as labels(matchLabels) in the selector
+      labels:
+        app: k8s-web-to-nginx
+    # In spec, we specify which containers we want in this pod
+    spec:
+      containers:
+      - name: k8s-web-to-nginx
+        image: sameer2907/k8s-web-to-nginx
+        resources:
+          # memory and cpu limits for each pod in this deployment
+          limits:
+            memory: "128Mi"
+            # 250m means one-fourth of the cpu core
+            cpu: "250m"
+        # We specify which port we would like to open in specific container
+        ports:
+        # List of the ports which will be open on pod's IP address
+        - containerPort: 3000

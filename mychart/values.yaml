@@ -1,0 +1,5 @@
+name: k8s-web-hello
+deployment:
+  image: sameer2907/k8s-web-hello:amd
+  tag: 1.0.0
+  containerPort: 3000
