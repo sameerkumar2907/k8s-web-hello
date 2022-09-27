@@ -6,32 +6,25 @@ phases:
       nodejs: 10
   pre_build:
     commands:
-      - echo "Installing something"
-  build:
-    commands:
       - echo "We are in pre build phase"
       - yum update -y
-      - yum install -y jq
-      - yum install git -y
+      - yum install -y jq sudo
+      - sudo yum install git -y
       - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
       - unzip -q awscliv2.zip
-      - ./aws/install && aws --version && rm -r ./aws
+      - sudo ./aws/install && aws --version && rm -r ./aws
       - curl -LO "https://dl.k8s.io/release/${KubectlVersion}/bin/linux/amd64/kubectl"
       - curl -LO "https://dl.k8s.io/${KubectlVersion}/bin/linux/amd64/kubectl.sha256"
       - echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
-      - install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-      - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+      - sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+      - sudo curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
       - export HELM_INSTALL_DIR="/bin"
-      - chmod 700 ./get_helm.sh
-      - ./get_helm.sh
-      - ln -s /usr/local/bin/helm /bin/helm
-      - echo "Reached the bottom of build step!!"
-      # - Region=$(wget -qO- http://instance-data/latest/meta-data/placement/region)
-      # - GITHUB_TOKEN="$(aws ssm get-parameter --name GITHUB_TOKEN --region $Region --with-decryption | jq .Parameter.Value -r)"
-      # - helm repo add peak-helm-charts "https://$GITHUB_TOKEN@raw.githubusercontent.com/peak-platform/peak-helm-charts/main/"
-      # - aws eks update-kubeconfig --kubeconfig /home/ssm-user/.kube/config --alias ${K8sCluster} --name ${K8sCluster} --region ${AWS::Region} --role-arn arn:aws:iam::${AWS::AccountId}:role/eks-cluster-deploy-role
-      # - sudo chmod go-r /home/ssm-user/.kube/config
-      # - sudo chown ssm-user:ssm-user /home/ssm-user -R
+      - sudo chmod 700 ./get_helm.sh
+      - sudo ./get_helm.sh
+      - sudo ln -s /usr/local/bin/helm /bin/helm
+  build:
+    commands:
+      - helm install --upgrade .
   post_build:
     commands:
       - echo We are in post build phase
