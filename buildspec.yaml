@@ -23,7 +23,7 @@ phases:
       # - export HELM_INSTALL_DIR="/bin"
       - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
       - sudo chmod 700 ./get_helm.sh
-      - sudo ./get_helm.sh || true
+      - sudo ./get_helm.sh --version v3.8.2 || true
       - sudo ls -lrt
       - sudo echo $PATH
       - helm version
