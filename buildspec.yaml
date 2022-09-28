@@ -35,7 +35,8 @@ phases:
       # - sudo mv /usr/local/bin/helm /usr/local/bin/helm3
   build:
     commands:
-      - helm install --upgrade .
+      # - helm install --upgrade .
+      - helm install k8s-web-hello mychart --namespace helm-deploy-test
   post_build:
     commands:
       - echo We are in post build phase
