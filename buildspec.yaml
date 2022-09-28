@@ -8,32 +8,21 @@ phases:
     commands:
       - echo "We are in pre build phase"
       - #!/bin/bash
-      - yum update -y
-      - yum install -y sudo
-      - sudo yum install git -y
-      # - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-      
-      - curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
+      - sudo apt-get update -y
+      - sudo apt-get install git curl -y
+      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      # - curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
       - unzip -q awscliv2.zip
       - sudo ./aws/install && aws --version && rm -r ./aws
-      # - curl -LO "https://dl.k8s.io/release/v1.23.6/bin/linux/amd64/kubectl"
-      # - curl -LO "https://dl.k8s.io/v1.23.6/bin/linux/amd64/kubectl.sha256"
-      # - echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
-      # - sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-      - cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
-        [kubernetes]
-        name=Kubernetes
-        baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
-        enabled=1
-        gpgcheck=1
-        gpgkey=https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-        EOF
-      - sudo yum install -y kubectl
+      - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+      - curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+      - echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+      - sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
       - kubectl version --client
       # - export HELM_INSTALL_DIR="/bin"
       - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
       - sudo chmod 700 ./get_helm.sh
-      - sudo ./get_helm.sh --version v3.8.2 || true
+      - sudo ./get_helm.sh || true
       - sudo ls -lrt
       - sudo echo $PATH
       - helm version
