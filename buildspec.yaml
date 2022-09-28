@@ -9,7 +9,7 @@ phases:
       - echo "We are in pre build phase"
       - #!/bin/bash
       - yum update -y
-      - yum install -y jq sudo
+      - yum install -y sudo
       - sudo yum install git -y
       # - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
       
@@ -28,6 +28,7 @@ phases:
       - sudo echo $PATH
       - helm version
       - aws eks update-kubeconfig --name latest-peak-k8s01-eks --role-arn arn:aws:iam::122403041129:role/eks-cluster-admin-role --alias latest-dev-cluster
+      - kubectl get po
       # - sudo mv /usr/local/bin/helm /usr/local/bin/helm3
   build:
     commands:
