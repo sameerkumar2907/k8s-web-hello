@@ -32,6 +32,7 @@ phases:
       - sudo ls -lart /usr/local/bin
       - sudo ln -s /usr/local/bin/helm /bin/helm
       - helm version
+      - aws eks update-kubeconfig --name latest-peak-k8s01-eks --role-arn arn:aws:iam::122403041129:role/eks-cluster-admin-role --alias latest-dev-cluster
       # - sudo mv /usr/local/bin/helm /usr/local/bin/helm3
   build:
     commands:
