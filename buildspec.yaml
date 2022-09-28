@@ -21,15 +21,14 @@ phases:
       - sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
       - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
       # - export PATH=$PATH:/usr/local/bin
-      # - export HELM_INSTALL_DIR="/usr/local/bin"
-      - sudo chmod +x linux-amd64/helm && sudo mv linux-amd64/helm /usr/bin/helm
-      - sudo chmod 777 ./get_helm.sh
-      - sudo sh -x ./get_helm.sh
+      - export HELM_INSTALL_DIR="/bin"
+      - sudo chmod 700 ./get_helm.sh
+      - sudo ./get_helm.sh
       - sudo ls -lrt
       - sudo echo $PATH
       - sudo ls -lart /usr/local/bin
-      # - sudo ln -s /usr/local/bin/helm /bin/helm
-      - sudo mv /usr/local/bin/helm /usr/local/bin/helm3
+      - sudo ln -s /usr/local/bin/helm /bin/helm
+      # - sudo mv /usr/local/bin/helm /usr/local/bin/helm3
   build:
     commands:
       - helm install --upgrade .
