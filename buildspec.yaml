@@ -6,26 +6,40 @@ phases:
       nodejs: 16
   pre_build:
     commands:
-      - echo "We are in pre build phase"
-      - #!/bin/bash
-      - sudo apt update -y
-      - sudo apt install git curl -y
-      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-      # - curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
-      - unzip -q awscliv2.zip
-      - sudo ./aws/install && aws --version && rm -r ./aws
-      - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-      - curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
-      - echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
-      - sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-      - kubectl version --client
-      # - export HELM_INSTALL_DIR="/bin"
-      - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-      - sudo chmod 700 ./get_helm.sh
-      - sudo ./get_helm.sh || true
-      - sudo ls -lrt
-      - sudo echo $PATH
-      - helm version
+      # - echo "We are in pre build phase"
+      # - #!/bin/bash
+      # - sudo apt update -y
+      # - sudo apt install git curl -y
+      # - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      # # - curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
+      # - unzip -q awscliv2.zip
+      # - sudo ./aws/install && aws --version && rm -r ./aws
+      # - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+      # - curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+      # - echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+      # - sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+      # - kubectl version --client
+      # # - export HELM_INSTALL_DIR="/bin"
+      # - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+      # - sudo chmod 700 ./get_helm.sh
+      # - sudo ./get_helm.sh || true
+      # - sudo ls -lrt
+      # - sudo echo $PATH
+      # - helm version
+
+
+      - apt-get update && apt-get -y install python3-pip python3-dev && python3 -m pip install --upgrade pip &&pip3 install --upgrade awscli
+      - curl -sS -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.19.6/2021-01-05/bin/linux/amd64/aws-iam-authenticator
+      - curl -sS -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+      - chmod +x ./kubectl
+      - chmod +x ./aws-iam-authenticator
+      - mv ./aws-iam-authenticator /usr/local/bin/aws-iam-authenticator
+      - mv ./kubectl /usr/local/bin/kubectl
+      - curl -sS --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+      - mv /tmp/eksctl /usr/local/bin
+      - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh
+      - chmod 700 get_helm.sh
+      - ./get_helm.sh
       - aws eks update-kubeconfig --name latest-peak-k8s01-eks --role-arn arn:aws:iam::122403041129:role/eks-cluster-admin-role --alias latest-dev-cluster
       # - kubectl get po
       # - sudo mv /usr/local/bin/helm /usr/local/bin/helm3
